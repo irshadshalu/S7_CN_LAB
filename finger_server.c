@@ -63,23 +63,17 @@ int main(int argc,char* argv[])
 	printf("%s\n", buffer);
 
 	printf("entering Server stub .. \n");
-	fp=popen(buffer,"r");
+	fp = popen(buffer,"r");
 	printf("Executed Procedure Locally ... \n");
-    if(fp == NULL){
-        strcpy(ch, "Invalid filename");
-        write(newsockfd, ch, strlen(ch));
-        error(ch);
-    }
-    else
-	    fgets(ch,256,fp);
+	fgets(ch, 256, fp);
 	printf("sending the output ... \n");
 	while(fp != NULL && !feof(fp))
 	{
-		write(newsockfd,ch,strlen(ch));
-		fgets(ch,256,fp);
+		write(newsockfd, ch, strlen(ch));
+		fgets(ch, 256, fp);
 	} 
-	strcpy(buffer,"@");
-	write(newsockfd,buffer,strlen(buffer));
+	strcpy(buffer, "@");
+	write(newsockfd, buffer, strlen(buffer));
 	close(newsockfd);
 	close(sockfd);
 	return 0;	

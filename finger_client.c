@@ -41,7 +41,7 @@ void finger(int sockfd,char* command)
 		read(sockfd,buffer,255);
 		if(buffer[0]=='@')
 			break;
-		printf("%s",buffer);
+		printf("%s",buffer);		
 	}
 	
 }
@@ -70,12 +70,20 @@ int main(int argc,char* argv[])
 	
 	if(connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr))<0)
 		error("ERROR connecting");
-	printf("Enter the command : ");
-	scanf("%s", command);
-	printf("Calling Local Finger Command ... \n");
-	finger(sockfd, command);
+	int option = -1;
+
+	printf("\n1. Run finger utility\n2. RPC call\n\tEnter option : ");
+	scanf("%d", &option);
+	if(option == 1){
+		printf("Calling Local Finger Command ... \n");
+		finger(sockfd, "finger");
+	}
+	else{
+		printf("Enter a command\n");
+		scanf("%s", command);
+		finger(sockfd, command);
+	}
 	printf("Executed successfully!!\n");
-	
 	close(sockfd);
 	return 0;
 }
