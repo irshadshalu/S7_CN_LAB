@@ -1,7 +1,23 @@
+// a subset of finger utility in C.
+// uses concept of 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
+// This program uses the concept of Remote Procedure Call.
+// it executes a program at Server on call from client. 
+// run using 
+/*
+	gcc finger_server.c -o finger_server
+	gcc finger_client.c -o finger_client
+	./finger_server 8080
+	./finger_client ip_address 8080
+
+	then enter a command (filename) in client which will be sent to server and server will return the specified file
+	
+
+
+*/
 
 void error(const char *msg)
 {
@@ -29,7 +45,7 @@ int main(int argc,char* argv[])
 	portno=atoi(argv[1]);
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
-	serv_addr.sin_port = htnos(portno);
+	serv_addr.sin_port = htons(portno);
 	
 	if(bind(sockfd, (struct sockaddr *) &serv_addr,sizeof(serv_addr))<0)
 		error("ERROR on Binding");
@@ -42,12 +58,20 @@ int main(int argc,char* argv[])
 	read(newsockfd,buffer,255);
 	printf("Recieved Request for Procedure call .. \n");
 
+	printf("%s\n", buffer);
+
 	printf("entering Server stub .. \n");
 	fp=fopen(buffer,"r");
 	printf("Executed Procedure Locally ... \n");
-	fgets(ch,256,fp);
+    if(fp == NULL){
+        strcpy(ch, "Invalid filename");
+        write(newsockfd, ch, strlen(ch));
+        error(ch);
+    }
+    else
+	    fgets(ch,256,fp);
 	printf("sending the output ... \n");
-	while(!feof(fp))
+	while(fp != NULL && !feof(fp))
 	{
 		write(newsockfd,ch,strlen(ch));
 		fgets(ch,256,fp);

@@ -1,23 +1,40 @@
+// a subset of finger utility in C.
+// uses concept of 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
+// This program uses the concept of Remote Procedure Call.
+// it executes a program at Server on call from client. 
+// run using 
+/*
 
+	(ignore warnings)
+
+	gcc finger_server.c -o finger_server
+	gcc finger_client.c -o finger_client
+	./finger_server 8080
+	./finger_client ip_address 8080
+
+	then enter a command (filename) in client which will be sent to server and server will return the specified file
+	
+
+
+*/
 char buffer[256];
-
+// function to print error and exit
 void error(const char *msg)
 {
-	perror(msg);
+	printf("%s\n", msg);
 	exit(0);
 }
 
 void finger(int sockfd,char* command)
 {
 	printf("Entered client stub ...\n");
-	strcpy(buffer,command);
+	strcpy(buffer, command);
 	printf("Executing Remote Finger command ... \n");
-	write(sockfd,buffer,strlen(buffer));
-	
+	write(sockfd, buffer, strlen(buffer));
 	while(1)
 	{
 		bzero(buffer,256);	
@@ -38,27 +55,25 @@ int main(int argc,char* argv[])
 	
 	if(argc<3)
 	{
-		fprintf(stderr,"usage %s hostname port \n",argv[0]);
+		fprintf(stderr, "usage %s hostname port \n", argv[0]);
 		exit(0);
 	}
 	
-	portno=atoi(argv[2]);
-	sockfd=socket(AF_INET,SOCK_STREAM,0);
-	if(sockfd<0)
+	portno = atoi(argv[2]);
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if(sockfd < 0)
 		error("ERROR opening socket");
-	bzero((char *) &serv_addr,sizeof(serv_addr));
+	bzero((char *) &serv_addr, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_addr.s_addr=inet_addr(argv[1]);
+	serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
 	serv_addr.sin_port = htons(portno);
 	
 	if(connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr))<0)
 		error("ERROR connecting");
 	printf("Enter the command : ");
-	gets(command);
-	printf("Press any Key to Execute Finger Utility using RPC ... \n");
-	scanf("%c",&ky);
+	scanf("%s", command);
 	printf("Calling Local Finger Command ... \n");
-	finger(sockfd,command);
+	finger(sockfd, command);
 	printf("Executed successfully!!\n");
 	
 	close(sockfd);
