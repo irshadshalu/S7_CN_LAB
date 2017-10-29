@@ -13,16 +13,18 @@
 	./finger_server 8080
 	./finger_client ip_address 8080
 
-	then enter a command (filename) in client which will be sent to server and server will return the specified file
+	then enter a command (shell command) in client 
+	   which will be sent to server and executed there!
 	
 
 
 */
 
+// function to print error and exit
 void error(const char *msg)
 {
-	perror(msg);
-	exit(1);
+	printf("%s\n", msg);
+	exit(0);
 }
 
 int main(int argc,char* argv[])
@@ -61,7 +63,7 @@ int main(int argc,char* argv[])
 	printf("%s\n", buffer);
 
 	printf("entering Server stub .. \n");
-	fp=fopen(buffer,"r");
+	fp=popen(buffer,"r");
 	printf("Executed Procedure Locally ... \n");
     if(fp == NULL){
         strcpy(ch, "Invalid filename");

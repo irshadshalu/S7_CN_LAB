@@ -8,20 +8,20 @@
 // it executes a program at Server on call from client. 
 // run using 
 /*
-
-	(ignore warnings)
-
 	gcc finger_server.c -o finger_server
 	gcc finger_client.c -o finger_client
 	./finger_server 8080
 	./finger_client ip_address 8080
 
-	then enter a command (filename) in client which will be sent to server and server will return the specified file
+	then enter a command (shell command) in client 
+	   which will be sent to server and executed there!
 	
 
 
 */
+
 char buffer[256];
+
 // function to print error and exit
 void error(const char *msg)
 {
