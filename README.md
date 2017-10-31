@@ -1,2 +1,2 @@
 # S7_CN_LAB
-Computer Networks lab done in Sem 7, Calicut University
+This is the whole collection of programs done as a part of CN lab session in Semester 7 of college.
