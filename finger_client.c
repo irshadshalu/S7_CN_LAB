@@ -76,7 +76,7 @@ int main(int argc,char* argv[])
 	scanf("%d", &option);
 	if(option == 1){
 		printf("Calling Local Finger Command ... \n");
-		finger(sockfd, "finger");
+		finger(sockfd, "who");
 	}
 	else{
 		printf("Enter a command\n");
